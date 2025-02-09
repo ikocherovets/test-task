@@ -3,13 +3,15 @@ import React from "react";
 import Beach from "@/public/beach_1.avif";
 import ProfilePicture from "@/public/profile_picture.jpeg";
 import ReservationSidebar from "@/components/properties/ReservationSidebar";
+import apiService from "@/services/apiService";
 
-const PropertyDetailPage = () => {
+const PropertyDetailPage = async ({ params }: { params: { id: string } }) => {
+  const property = await apiService.get(`/api/properties/${params.id}`);
   return (
     <main className="max-w-[1500px] mx-auto px-6 pb-6">
       <div className="w-full h-[64vh] mb-4 overflow-hidden rounded-xl relative">
         <Image
-          src={Beach}
+          src={property.image_url}
           alt="Beach house"
           className="object-cover w-full h-full"
           fill
@@ -18,37 +20,35 @@ const PropertyDetailPage = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <div className="py-6 pr-6 col-span-3">
-          <h1 className="mb-4 text-4xl">Left side</h1>
+          <h1 className="mb-4 text-4xl">{property.title}</h1>
 
           <span className="mb-6 block text-lg text-gray-600">
-            4 guests - 2 bedrooms - 1 bathroom
+            {property.guests} guest - {property.bedrooms} bedrooms -{" "}
+            {property.bathrooms} bathrooms
           </span>
 
           <hr />
 
           <div className="py-6 flex items-center space-x-4">
-            <Image
-              src={ProfilePicture}
-              alt="The user name"
-              className="rounded-full w-[50px] h-[50px]"
-              
-            />
+            {property.landlord.avatar_url && (
+              <Image
+                src={property.landlord.avatar_url}
+                alt="The user name"
+                className="rounded-full w-[50px] h-[50px]"
+              />
+            )}
 
             <p>
-              <strong>Illia Kocherovets </strong>is your host
+              <strong>{property.landlord.name}</strong> is your host
             </p>
           </div>
 
           <hr />
 
-          <p className="mt-6 text-lg">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem
-            sit qui nemo odit, quasi voluptatibus? Maxime facere magni
-            reiciendis neque.
-          </p>
+          <p className="mt-6 text-lg">{property.description}</p>
         </div>
 
-       <ReservationSidebar />
+        <ReservationSidebar property={property}/>
       </div>
     </main>
   );

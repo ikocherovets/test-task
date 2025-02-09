@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 
 from .models import Property
 from .forms import PropertyForm
-from .serializers import PropertiesListSerializer
+from .serializers import PropertiesListSerializer, PropertiesDetailSerializer
 
 @api_view(['GET'])
 @authentication_classes([])
@@ -13,8 +13,17 @@ def properties_list(request):
     serializer = PropertiesListSerializer(properties, many=True)
     
     return JsonResponse({"data": serializer.data}, safe=False)
+  
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def properties_detail(request, pk):
+    property = Property.objects.get(pk=pk)
+    serializer = PropertiesDetailSerializer(property, many=False)
+    
+    return JsonResponse(serializer.data)
 
-@api_view(['POST'])
+@api_view(['POST', 'FILES'])
 def create_property(request):
     form = PropertyForm(request.POST, request.FILES)
     
@@ -26,4 +35,5 @@ def create_property(request):
         return JsonResponse({'success': True})
     else:
         print({'error': form.errors, 'non_field_errors': form.non_field_errors()})
+        
         return JsonResponse({'error': form.errors}, status=400)

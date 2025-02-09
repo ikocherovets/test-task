@@ -1,35 +1,37 @@
 "use client";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import Modal from "./Modal";
-import useLoginModal from "@/hooks/useLoginModal";
-import CustomButton from "@/forms/CustomButton";
-import { handleLogin } from "@/lib/actions";
 
+import Modal from "./Modal";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import useLoginModal from "@/hooks/useLoginModal";
+import CustomButton from "../forms/CustomButton";
+import { handleLogin } from "@/lib/actions";
 import apiService from "@/services/apiService";
 
 const LoginModal = () => {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPasword] = useState("");
-  const [errors, setErrors] = useState<string[]>([]);
-
   const loginModal = useLoginModal();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
 
   const submitLogin = async () => {
     const formData = {
-      email,
-      password,
+      email: email,
+      password: password,
     };
 
-    const response = await apiService.post(
+    const response = await apiService.postWithoutToken(
       "/api/auth/login/",
       JSON.stringify(formData)
     );
 
     if (response.access) {
       handleLogin(response.user.pk, response.access, response.refresh);
+
       loginModal.close();
+
       router.push("/");
     } else {
       setErrors(response.non_field_errors);
@@ -38,33 +40,37 @@ const LoginModal = () => {
 
   const content = (
     <>
-      <form className="space-y-4" action="">
+      <form action={submitLogin} className="space-y-4">
         <input
           onChange={(e) => setEmail(e.target.value)}
+          placeholder="Your e-mail address"
           type="email"
-          className="px-4 w-full h-[54px] border-gray-300 hover:bg-gray-300 rounded-xl"
-          placeholder="Your email adress"
+          className="w-full h-[54px] px-4 border border-gray-300 rounded-xl"
         />
 
         <input
-          onChange={(e) => setPasword(e.target.value)}
-          type="password"
-          className="px-4 w-full h-[54px] border-gray-300 hover:bg-gray-300 rounded-xl"
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Your password"
+          type="password"
+          className="w-full h-[54px] px-4 border border-gray-300 rounded-xl"
         />
 
-        {errors?.map((error, index) => (
-          <div
-            key={`error_${index}`}
-            className="p-5 bg-livio text-white rounded-xl opacity-80"
-          >
-            {error}
-          </div>
-        ))}
+        {errors.map((error, index) => {
+          return (
+            <div
+              key={`error_${index}`}
+              className="p-5 bg-airbnb text-white rounded-xl opacity-80"
+            >
+              {error}
+            </div>
+          );
+        })}
+
         <CustomButton label="Submit" onClick={submitLogin} />
       </form>
     </>
   );
+
   return (
     <Modal
       isOpen={loginModal.isOpen}
