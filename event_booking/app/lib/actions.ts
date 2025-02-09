@@ -9,14 +9,14 @@ export async function handleLogin(
 ) {
   const cookieStore = await cookies(); // Await the cookies promise
 
-  await cookieStore.set("session_userid", userId, {
+  cookieStore.set("session_userid", userId, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 7, // one week
     path: "/",
   });
 
-  await cookieStore.set("session_access_token", accessToken, {
+  cookieStore.set("session_access_token", accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 7, // one week
@@ -34,9 +34,9 @@ export async function handleLogin(
 export async function reseAuthCookies() {
   const cookieStore = await cookies(); // Await the cookies promise
 
-  await cookieStore.set("session_userid", "");
-  await cookieStore.set("session_access_token", "");
-  await cookieStore.set("session_refresh_token", "");
+  cookieStore.set("session_userid", "");
+  cookieStore.set("session_access_token", "");
+  cookieStore.set("session_refresh_token", "");
 }
 
 //get data
@@ -44,4 +44,10 @@ export async function getUserId() {
   const cookieStore = await cookies();
   const userId = cookieStore.get("session_userid")?.value;
   return userId ? userId : null;
+}
+
+export async function getAccessToken() {
+  let accessToken = (await cookies()).get("session_access_token")?.value;
+
+  return accessToken
 }

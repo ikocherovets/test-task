@@ -1,9 +1,27 @@
-import React from 'react'
+"use client";
+import React from "react";
+import useAddPropertyModal from "@/hooks/useAddPropertyModal";
+import useLoginModal from "@/hooks/useLoginModal";
 
-const AddPropertyButton = () => {
-  return (
-    <div className='p-2 text-sm font-semibold rounded-full hover:bg-gray-200'>AddPropertyButton</div>
-  )
+interface AddPropertyButtonProps {
+  userId?: string | null;
 }
 
-export default AddPropertyButton
+const AddPropertyButton: React.FC<AddPropertyButtonProps> = ({ userId }) => {
+  const loginModal = useLoginModal();
+  const addPropertyModal = useAddPropertyModal();
+
+  const livioYourHome = () =>
+    userId ? addPropertyModal.open() : loginModal.open();
+
+  return (
+    <div
+      onClick={livioYourHome}
+      className="p-2 text-sm font-semibold rounded-full hover:bg-gray-200 cursor-pointer"
+    >
+      AddPropertyButton
+    </div>
+  );
+};
+
+export default AddPropertyButton;
