@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import apiService from "@/services/apiService";
 import PropertyListItem from "./PropertyListItem";
+
 export type PropertyType = {
   id: string;
   title: string;

@@ -14,6 +14,9 @@ import { useRouter } from "next/navigation";
 import Categories from "../addproperty/Categories";
 
 const AddPropertyModal = () => {
+  //
+  // States
+
   const [currentStep, setCurrentStep] = useState(1);
   const [errors, setErrors] = useState<string[]>([]);
   const [dataCategory, setDataCategory] = useState("");
@@ -26,8 +29,14 @@ const AddPropertyModal = () => {
   const [dataCountry, setDataCountry] = useState<SelectCountryValue>();
   const [dataImage, setDataImage] = useState<File | null>(null);
 
+  //
+  //
+
   const addPropertyModal = useAddPropertyModal();
   const router = useRouter();
+
+  //
+  // Set datas
 
   const setCategory = (category: string) => {
     setDataCategory(category);
@@ -41,9 +50,10 @@ const AddPropertyModal = () => {
     }
   };
 
-  const submitForm = async () => {
-    console.log("submitForm");
+  //
+  // SUbmit
 
+  const submitForm = async () => {
     if (
       dataCategory &&
       dataTitle &&
@@ -64,15 +74,20 @@ const AddPropertyModal = () => {
       formData.append("country_code", dataCountry.value);
       formData.append("image", dataImage);
 
+      console.log("Form Data Prepared: ", formData);
+
       const response = await apiService.post(
         "/api/properties/create/",
         formData
       );
 
-      if (response.success) {
-        console.log("SUCCESS");
+      console.log("Response: ", response);
 
-        router.push("/?added=true");
+      if (response.success) {
+        console.log("SUCCESS :-D");
+
+        router.push("/");
+        window.location.reload();
 
         addPropertyModal.close();
       } else {
@@ -89,9 +104,12 @@ const AddPropertyModal = () => {
     }
   };
 
+  //
+  //
+
   const content = (
     <>
-      {currentStep === 1 && (
+      {currentStep == 1 ? (
         <>
           <h2 className="mb-6 text-2xl">Choose category</h2>
 
@@ -102,8 +120,7 @@ const AddPropertyModal = () => {
 
           <CustomButton label="Next" onClick={() => setCurrentStep(2)} />
         </>
-      )}
-      {currentStep === 2 && (
+      ) : currentStep == 2 ? (
         <>
           <h2 className="mb-6 text-2xl">Describe your place</h2>
 
@@ -130,14 +147,14 @@ const AddPropertyModal = () => {
 
           <CustomButton
             label="Previous"
-            className="mb-2 bg-black hover:bg-gray-800"
+            className="mb-2"
             onClick={() => setCurrentStep(1)}
+            theme="black"
           />
 
           <CustomButton label="Next" onClick={() => setCurrentStep(3)} />
         </>
-      )}
-      {currentStep === 3 && (
+      ) : currentStep == 3 ? (
         <>
           <h2 className="mb-6 text-2xl">Details</h2>
 
@@ -185,14 +202,14 @@ const AddPropertyModal = () => {
 
           <CustomButton
             label="Previous"
-            className="mb-2 bg-black hover:bg-gray-800"
+            className="mb-2"
             onClick={() => setCurrentStep(2)}
+            theme="black"
           />
 
           <CustomButton label="Next" onClick={() => setCurrentStep(4)} />
         </>
-      )}
-      {currentStep === 4 && (
+      ) : currentStep == 4 ? (
         <>
           <h2 className="mb-6 text-2xl">Location</h2>
 
@@ -205,14 +222,14 @@ const AddPropertyModal = () => {
 
           <CustomButton
             label="Previous"
-            className="mb-2 bg-black hover:bg-gray-800"
+            className="mb-2"
             onClick={() => setCurrentStep(3)}
+            theme="black"
           />
 
           <CustomButton label="Next" onClick={() => setCurrentStep(5)} />
         </>
-      )}
-      {currentStep === 5 && (
+      ) : (
         <>
           <h2 className="mb-6 text-2xl">Image</h2>
 
@@ -237,7 +254,7 @@ const AddPropertyModal = () => {
             return (
               <div
                 key={index}
-                className="p-5 mb-4 bg-livio text-white rounded-xl opacity-80"
+                className="p-5 mb-4 bg-airbnb text-white rounded-xl opacity-80"
               >
                 {error}
               </div>
@@ -246,8 +263,9 @@ const AddPropertyModal = () => {
 
           <CustomButton
             label="Previous"
-            className="mb-2 bg-black hover:bg-gray-800 !bg-black !hover:bg-gray-800"
+            className="mb-2"
             onClick={() => setCurrentStep(4)}
+            theme="black"
           />
 
           <CustomButton label="Submit" onClick={submitForm} />
