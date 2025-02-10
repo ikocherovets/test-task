@@ -14,9 +14,6 @@ import { useRouter } from "next/navigation";
 import Categories from "../addproperty/Categories";
 
 const AddPropertyModal = () => {
-  //
-  // States
-
   const [currentStep, setCurrentStep] = useState(1);
   const [errors, setErrors] = useState<string[]>([]);
   const [dataCategory, setDataCategory] = useState("");
@@ -29,14 +26,8 @@ const AddPropertyModal = () => {
   const [dataCountry, setDataCountry] = useState<SelectCountryValue>();
   const [dataImage, setDataImage] = useState<File | null>(null);
 
-  //
-  //
-
   const addPropertyModal = useAddPropertyModal();
   const router = useRouter();
-
-  //
-  // Set datas
 
   const setCategory = (category: string) => {
     setDataCategory(category);
@@ -49,9 +40,6 @@ const AddPropertyModal = () => {
       setDataImage(tmpImage);
     }
   };
-
-  //
-  // SUbmit
 
   const submitForm = async () => {
     if (
@@ -109,7 +97,7 @@ const AddPropertyModal = () => {
 
   const content = (
     <>
-      {currentStep == 1 ? (
+      {currentStep === 1 && (
         <>
           <h2 className="mb-6 text-2xl">Choose category</h2>
 
@@ -120,7 +108,8 @@ const AddPropertyModal = () => {
 
           <CustomButton label="Next" onClick={() => setCurrentStep(2)} />
         </>
-      ) : currentStep == 2 ? (
+      )}
+      {currentStep === 2 && (
         <>
           <h2 className="mb-6 text-2xl">Describe your place</h2>
 
@@ -154,7 +143,8 @@ const AddPropertyModal = () => {
 
           <CustomButton label="Next" onClick={() => setCurrentStep(3)} />
         </>
-      ) : currentStep == 3 ? (
+      )}
+      {currentStep === 3 && (
         <>
           <h2 className="mb-6 text-2xl">Details</h2>
 
@@ -209,7 +199,8 @@ const AddPropertyModal = () => {
 
           <CustomButton label="Next" onClick={() => setCurrentStep(4)} />
         </>
-      ) : currentStep == 4 ? (
+      )}
+      {currentStep === 4 && (
         <>
           <h2 className="mb-6 text-2xl">Location</h2>
 
@@ -229,7 +220,8 @@ const AddPropertyModal = () => {
 
           <CustomButton label="Next" onClick={() => setCurrentStep(5)} />
         </>
-      ) : (
+      )}
+      {currentStep === 5 && (
         <>
           <h2 className="mb-6 text-2xl">Image</h2>
 
