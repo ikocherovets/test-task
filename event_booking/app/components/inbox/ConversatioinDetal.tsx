@@ -9,12 +9,12 @@ const ConversationDetal = () => {
       <div className="max-h-[400px] overflow-auto flex flex-col space-y-4">
         <div className="w-[80%] py-4 px-6 rounded-xl bg-gray-200">
           <p className="font-bold text-gray-500">Illia Kocherovets</p>
-          <p>Віка - ти моє все!</p>
+          <p>It was a pleasure to develop this web application</p>
         </div>
 
         <div className="w-[80%] ml-[20%] py-4 px-6 rounded-xl bg-blue-200">
-          <p className="font-bold text-gray-500">Viktoriia Orshak</p>
-          <p>мяу мяу мяу</p>
+          <p className="font-bold text-gray-500">Cognizant</p>
+          <p>Keep it up!</p>
         </div>
       </div>
 
